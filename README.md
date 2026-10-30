@@ -23,17 +23,17 @@
 
 适合方案比较、设计分析和决策建议；写代码、改仓库、调试、运行测试、部署等实施工作继续由主 Agent 完成。
 
-当前实现默认使用 **ego lite 的官方 `ego-browser` CLI**，已在 macOS 完成真实网页任务与崩溃恢复验证。完整记录见[验证记录](https://github.com/jiafan-tiaocan/ai-retires-human/blob/codex/web-task-relay/docs/verification.md)。不承诺免费或独立额度池，也没有测出固定节省比例。
+当前实现默认使用 **ego lite 的官方 `ego-browser` CLI**，已在 macOS 完成真实网页任务与崩溃恢复验证。完整记录见[验证记录](https://github.com/jiafan-tiaocan/ai-retires-human/blob/main/docs/verification.md)。不承诺免费或独立额度池，也没有测出固定节省比例。
 
 ## 代码与使用
 
-Skill 和执行器当前在 [PR #2](https://github.com/jiafan-tiaocan/ai-retires-human/pull/2) 的[候选分支](https://github.com/jiafan-tiaocan/ai-retires-human/tree/codex/web-task-relay)，尚未合并。首页 README 已单独初始化，查看代码请使用该分支。
+Skill、执行器、使用说明与示例都在本仓库。克隆后按下面的入口安装。
 
 ```sh
-git clone --branch codex/web-task-relay https://github.com/jiafan-tiaocan/ai-retires-human.git
+git clone https://github.com/jiafan-tiaocan/ai-retires-human.git
 ```
 
-将仓库中的完整 `skills/web-task-relay` 目录安装到 Agent 的 Skill 目录。Codex 也可以使用 `$skill-installer` 从上述仓库分支安装。默认执行器需要 Python 3.9+、ego lite，以及正常登录的目标网站。
+将仓库中的完整 `skills/web-task-relay` 目录安装到 Agent 的 Skill 目录。Codex 也可以使用 `$skill-installer` 从上述仓库的 `skills/web-task-relay` 路径安装。默认执行器需要 Python 3.9+、ego lite，以及正常登录的目标网站。
 
 ```text
 使用 $web-task-relay，我选择网页交接这种省 token 的方法。
@@ -42,15 +42,15 @@ git clone --branch codex/web-task-relay https://github.com/jiafan-tiaocan/ai-ret
 验收：每项结论能对应资料，计算可复核。
 ```
 
-- [Skill 入口](https://github.com/jiafan-tiaocan/ai-retires-human/tree/codex/web-task-relay/skills/web-task-relay)
-- [安装、运行与边界](https://github.com/jiafan-tiaocan/ai-retires-human/blob/codex/web-task-relay/docs/web-task-relay.md)
-- [需求与触发条件](https://github.com/jiafan-tiaocan/ai-retires-human/blob/codex/web-task-relay/docs/requirements.md)
-- [执行器设计与恢复](https://github.com/jiafan-tiaocan/ai-retires-human/blob/codex/web-task-relay/docs/design.md)
-- [企业知识管理任务包](https://github.com/jiafan-tiaocan/ai-retires-human/blob/codex/web-task-relay/examples/enterprise-knowledge-research.md)
-- [演示与介绍](https://github.com/jiafan-tiaocan/ai-retires-human/blob/codex/web-task-relay/docs/demo.md)
+- [Skill 入口](https://github.com/jiafan-tiaocan/ai-retires-human/tree/main/skills/web-task-relay)
+- [安装、运行与边界](https://github.com/jiafan-tiaocan/ai-retires-human/blob/main/docs/web-task-relay.md)
+- [需求与触发条件](https://github.com/jiafan-tiaocan/ai-retires-human/blob/main/docs/requirements.md)
+- [执行器设计与恢复](https://github.com/jiafan-tiaocan/ai-retires-human/blob/main/docs/design.md)
+- [企业知识管理任务包](https://github.com/jiafan-tiaocan/ai-retires-human/blob/main/examples/enterprise-knowledge-research.md)
+- [演示与介绍](https://github.com/jiafan-tiaocan/ai-retires-human/blob/main/docs/demo.md)
 
 ## 参与
 
-欢迎带一个具体问题、完整的输入与验收标准来试。请保留可复现的失败和改进依据，提交可公开的合成或授权材料。项目采用 [MIT License](https://github.com/jiafan-tiaocan/ai-retires-human/blob/codex/web-task-relay/LICENSE)。
+欢迎带一个具体问题、完整的输入与验收标准来试。请保留可复现的失败和改进依据，提交可公开的合成或授权材料。项目采用 [MIT License](https://github.com/jiafan-tiaocan/ai-retires-human/blob/main/LICENSE)。
 
-网站规则、平台支持与当前限制见[使用边界](https://github.com/jiafan-tiaocan/ai-retires-human/blob/codex/web-task-relay/docs/web-task-relay.md)。技术验证不代表网站授予自动化许可；当前通用 CLI 保存结果后在下次交互回收，不会自动唤醒主 Agent。
+网站规则、平台支持与当前限制见[使用边界](https://github.com/jiafan-tiaocan/ai-retires-human/blob/main/docs/web-task-relay.md)。技术验证不代表网站授予自动化许可；当前通用 CLI 保存结果后在下次交互回收，不会自动唤醒主 Agent。

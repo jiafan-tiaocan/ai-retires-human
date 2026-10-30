@@ -1,0 +1,4 @@
+interface:
+  display_name: "Web Task Relay"
+  short_description: "Token-saving methods; web handoff only when selected"
+  default_prompt: "Use $web-task-relay as my chosen token-saving method: hand off this fully defined planning task to my web session, then verify the result."
