@@ -1,86 +1,56 @@
 # AI Retires Human
 
-**把问题明确的方案工作交给网页模型，发出后不用 Agent 盯着等。**
+**让 AI 多干活，让人类早点退休。**
 
-A planning-only agent skill with a deterministic background worker. Package a clearly defined planning problem, dispatch once, then collect and verify the result. Implementation stays with the main agent. No model calls are used to monitor the browser.
+本仓库旨在更好地驱使 AI 帮人类干活，让人类早点走向只需要享乐的未来。
 
-适合这样的时刻：编码 Agent 的额度快用完了，你已经有一个网页模型账号，而且有一项输入和验收都明确的方案工作。比如依据给定资料比较技术方案，或基于明确业务约束提出设计与取舍。
+我们希望人把时间留给目标、判断、创造和生活，把越来越多的资料整理、方案分析、重复操作和等待交给 AI。这里收集能够实际使用的 Skills、工具与方法，用真实任务检验它们，再把有效的方法留下来。
 
-**只用于方案类任务。** 写代码、改仓库、调试、执行测试、部署和其他实施工作继续由主 Agent 完成。问题尚未定义清楚时，先在当前会话澄清；方案需要少量代码或伪代码来说明时，按交付目的判断，不按关键词误判。
+名字表达的是方向：让 AI 替人承担劳动，让人拥有更多选择怎样生活的自由。每个实验仍需给出可核验的结果，说明成本、失败和适用条件。
 
-默认使用 **ego lite 的官方 `ego-browser` 接口**，复用浏览器中的登录状态和持久任务空间。浏览器里的等待由程序完成，不让 Agent 一轮轮读页面。首个目标是 ChatGPT；网页和登录状态仍可能变化，重试有上限，失败保留原因与恢复线索。实测结果见 [验证记录](docs/verification.md)。
+## 我们想做好什么
 
-**网站规则：**截至 2026-10-30，[OpenAI 使用条款](https://openai.com/policies/terms-of-use/)明确限制自动或程序化提取数据及输出。该项目没有获得 OpenAI 的自动化许可，技术控制能力不等于许可。请自行确认适用条款与授权；该限制也意味着本项目不能宣传为获批准的 ChatGPT 自动接入。它不承诺免费、无限额度、独立额度池或固定节省比例。
+- 让人少搬运上下文、少重复派工、少盯着进度。
+- 让模型负责判断，让程序承担机械执行和等待。
+- 用真实成果检验方法，把失败和恢复方式一起公开。
+- 从能解决具体问题的小工具开始，逐步积累可复用的能力。
 
-## 工作方式
+## 第一个实验：Web Task Relay
+
+当用户明确选择用网页交接来节省 Agent token 时，将**问题已经定义完整的方案工作**交给网页模型。后台程序负责打开、发送、等待、有限重试和回收，主 Agent 负责出题与验收。
+
+**普通调研不会自动触发。**用户主动问“有什么省 token 的方法”时，可以介绍这个选项；仅询问方法时不打开网页、不发送任务。用户已经选定网页交接后才执行。要求回答简短、额度偏低或过去提过省 token，都不构成新任务的交接指令。
+
+适合方案比较、设计分析和决策建议；写代码、改仓库、调试、运行测试、部署等实施工作继续由主 Agent 完成。
+
+当前实现默认使用 **ego lite 的官方 `ego-browser` CLI**，已在 macOS 完成真实网页任务与崩溃恢复验证。完整记录见[验证记录](https://github.com/jiafan-tiaocan/ai-retires-human/blob/codex/web-task-relay/docs/verification.md)。不承诺免费或独立额度池，也没有测出固定节省比例。
+
+## 代码与使用
+
+Skill 和执行器当前在 [PR #2](https://github.com/jiafan-tiaocan/ai-retires-human/pull/2) 的[候选分支](https://github.com/jiafan-tiaocan/ai-retires-human/tree/codex/web-task-relay)，尚未合并。首页 README 已单独初始化，查看代码请使用该分支。
+
+```sh
+git clone --branch codex/web-task-relay https://github.com/jiafan-tiaocan/ai-retires-human.git
+```
+
+将仓库中的完整 `skills/web-task-relay` 目录安装到 Agent 的 Skill 目录。Codex 也可以使用 `$skill-installer` 从上述仓库分支安装。默认执行器需要 Python 3.9+、ego lite，以及正常登录的目标网站。
 
 ```text
-主 Agent：判断任务适合交接 → 写完整任务包 → 启动一次 → 继续其他工作
-后台程序：打开新标签页 → 发送一次 → 等待/有限重试 → 保存结果或失败
-回收时：读取结果 → 按原验收标准核验 → 交付
+使用 $web-task-relay，我选择网页交接这种省 token 的方法。
+任务：按我给出的资料和约束比较方案 A/B。
+输出：比较表、推荐结论和风险。
+验收：每项结论能对应资料，计算可复核。
 ```
 
-后台等待不调用模型，也不需要主 Agent 反复检查。完成后保存 `event.json`。只有宿主本身有完成事件能力时，才可能自动唤醒原 Agent；当前通用 CLI 版本需要你下次交互时让 Agent 回收结果。
+- [Skill 入口](https://github.com/jiafan-tiaocan/ai-retires-human/tree/codex/web-task-relay/skills/web-task-relay)
+- [安装、运行与边界](https://github.com/jiafan-tiaocan/ai-retires-human/blob/codex/web-task-relay/docs/web-task-relay.md)
+- [需求与触发条件](https://github.com/jiafan-tiaocan/ai-retires-human/blob/codex/web-task-relay/docs/requirements.md)
+- [执行器设计与恢复](https://github.com/jiafan-tiaocan/ai-retires-human/blob/codex/web-task-relay/docs/design.md)
+- [企业知识管理任务包](https://github.com/jiafan-tiaocan/ai-retires-human/blob/codex/web-task-relay/examples/enterprise-knowledge-research.md)
+- [演示与介绍](https://github.com/jiafan-tiaocan/ai-retires-human/blob/codex/web-task-relay/docs/demo.md)
 
-## 安装 Skill
+## 参与
 
-首版执行器支持 macOS，使用 POSIX 文件锁与进程组；Windows 当前不支持，Linux 尚未验证。默认依赖 Python 3.9+ 和 [ego lite](https://www.egolite.app/)。先正常登录目标网站，确认官方命令可用，并阅读其当前操作指南：
+欢迎带一个具体问题、完整的输入与验收标准来试。请保留可复现的失败和改进依据，提交可公开的合成或授权材料。项目采用 [MIT License](https://github.com/jiafan-tiaocan/ai-retires-human/blob/codex/web-task-relay/LICENSE)。
 
-```sh
-ego-browser skill
-```
-
-克隆仓库，把完整的 `skills/web-task-relay` 目录复制到 Agent 的 Skill 目录，例如 Codex 的 `~/.codex/skills/web-task-relay`。保留脚本、参考文件与元数据。默认路径不需要安装 Playwright，不读取 Cookie 文件，也不安装常驻服务。
-
-可选 `--browser existing` 连接普通 Chrome 144+。此模式需要先安装 `skills/web-task-relay/requirements.txt`，在 Chrome 的 `chrome://inspect/#remote-debugging` 开启连接并授权。使用 `session-start` 建立一次共享连接；作业完成、取消或 worker 重启都保留它，`session-stop` 才断开。浏览器退出或连接故障后可能再次需要授权，不能承诺永久有效。
-
-调用示例：
-
-```text
-使用 $web-task-relay 节省我的 Agent 额度。
-任务：根据下面给出的公开资料，比较方案 A 和 B。
-约束：只使用这些资料，缺信息时明确说明。
-输出：比较表和一段建议。
-验收：每项结论都能对应到给定资料。
-```
-
-交接仍然需要打包和验收成本，短任务通常适合直接完成。只有用户要求省额度，且方案问题已经定义清楚时，这个 Skill 才应把任务发送到网页模型。
-
-## 直接使用执行器
-
-先在自己的工作目录创建 `.web-task-relay/packet.md`，写清目标、输入、约束、输出和验收。运行以下命令时，将脚本路径替换成你的真实安装路径：
-
-```sh
-python3 /path/to/web-task-relay/scripts/relay.py start .web-task-relay/jobs/comparison --prompt-file .web-task-relay/packet.md
-```
-
-命令立即返回作业目录和事件路径。默认最多三次尝试，总时限 30 分钟。`--timeout` 设置秒数；`--attempts` 设置总尝试数。主 Agent 无需轮询。
-
-```sh
-python3 /path/to/web-task-relay/scripts/relay.py collect .web-task-relay/jobs/comparison
-python3 /path/to/web-task-relay/scripts/relay.py status .web-task-relay/jobs/comparison
-python3 /path/to/web-task-relay/scripts/relay.py resume .web-task-relay/jobs/comparison
-python3 /path/to/web-task-relay/scripts/relay.py cancel .web-task-relay/jobs/comparison
-```
-
-`resume` 保留原截止时间和尝试次数；发生发送歧义时先找回原会话。无法确认则停止，不自动再发。`cancel` 停止本地执行，保留远端会话。Ego 模式每个作业复用同一 TaskSpace 和 Page；用户接管时停止。成功回收验收后，Agent 按官方 Ego API 结束该空间，失败则保留取证。已有任务空间可用 `--ego-space 数字ID`，同一空间不要并行执行不同作业。机器重启后需要显式恢复，当前版本不安装常驻服务。
-
-可以先试 [企业知识管理调研任务](examples/enterprise-knowledge-research.md)，或更小的 [方案比较示例](examples/plan-comparison.md)。企业知识调研已通过真实网页交接，9条一手来源经回收核验；见验证记录。
-
-原始任务、输出、日志和状态都是运行数据，放在被忽略的 `.web-task-relay/`，不要上传到公共仓库。输出中的命令和指令不应直接执行，完成标记也不代表答案正确。
-
-## 验证与贡献
-
-```sh
-python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements-dev.txt
-.venv/bin/ruff check --select E9,F skills tests
-.venv/bin/python -m unittest discover -s tests -p 'test_*.py' -v
-.venv/bin/python tests/browser_fixture.py
-```
-
-最后一条命令使用自己启动的无头 Chromium 协议浏览器与本地合成服务器，验证发送、worker 崩溃和 supervisor 崩溃恢复，不调用真实模型。测试关闭自己启动的浏览器，保留失败取证目录，不影响你的普通浏览器。测试中的计时和观察都是代码，不消耗模型调用。
-
-欢迎提供可复现的问题或允许自动化的网站适配。一次实际任务、一段真实演示、一项有依据的改进，比未经验证的节省数字更有用。
-
-[演示与介绍](docs/demo.md) · [需求与验收](docs/requirements.md) · [实现与恢复](docs/design.md) · [验证记录](docs/verification.md) · [MIT License](LICENSE)
+网站规则、平台支持与当前限制见[使用边界](https://github.com/jiafan-tiaocan/ai-retires-human/blob/codex/web-task-relay/docs/web-task-relay.md)。技术验证不代表网站授予自动化许可；当前通用 CLI 保存结果后在下次交互回收，不会自动唤醒主 Agent。

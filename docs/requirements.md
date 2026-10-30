@@ -1,4 +1,4 @@
-# Web Task Relay — requirements, revision 3
+# Web Task Relay — requirements, revision 4
 
 This is a personal open-source project for an individual coding-agent user. Its destination is `https://github.com/jiafan-tiaocan/ai-retires-human`. No employer source code, internal rules, task records, account data or business examples belong in the published package.
 
@@ -20,7 +20,9 @@ The user enabled Chrome Apple Events JavaScript access during this session. That
 
 ```mermaid
 flowchart TD
-  A[User asks to save agent usage] --> B{Task self-contained and worthwhile? R1}
+  A[Explicit token-saving methods request or selected web relay] --> A1{User selected actual web handoff?}
+  A1 -->|Methods discussion only| A2[Explain option without browser or job]
+  A1 -->|Selected for this task| B{Planning task self-contained and worthwhile? R1}
   B -- No --> C[Continue locally or explain missing input]
   B -- Yes --> D[Agent prepares packet and starts worker R2]
   D --> E[Agent returns job receipt and leaves monitoring]
@@ -43,7 +45,7 @@ flowchart TD
   N --> O[Agent validates result or reports failure R9]
 ```
 
-- **R1** Activate only for explicit agent-usage conservation intent, a planning/design/advice deliverable, and a clearly defined complete problem. Coding/implementation, repository edits, debugging, executing tests and deployment are excluded even when quota is low. Keep implementation after plan acceptance with the main agent. Do not hand off unclear problems, trivial work, secret material, entire chat histories or tasks requiring local tools the target cannot use. A claim of low quota must come from the user or real host telemetry; never invent a remaining percentage. Packets and verification still cost tokens.
+- **R1** Consider the skill only when the user explicitly asks about methods to save tokens/agent quota or explicitly selects this skill/web handoff. Ordinary research/planning, concise-answer requests, low-quota signals and past saving preferences do not trigger it. A methods question gets advice without opening a browser or creating a job. Dispatch requires the user to have selected web handoff for this complete planning problem; existing authorization for the same task is reused. Coding/implementation, repository edits, debugging, executing tests and deployment remain with the main agent. Unclear or trivial problems, secret material and tasks needing unavailable local tools are poor handoffs. Never invent quota telemetry or measured savings.
 - **R2** A packet contains objective, necessary input, constraints, expected output and acceptance criteria. It has a unique job ID. Save it locally and submit only the authorized content. One task creates one job receipt. Reusing a job ID must not silently launch a second worker.
 - **R3** Proposed defaults are three browser attempts and a 30-minute overall deadline; they are tunable technical defaults, not user-promised service levels. Browser waits use ordinary code, without model calls. Login/challenge/usage-limit pages produce `needs_attention`, not account switching or endless retries.
 - **R4** Persist `submitting` before clicking Send. A timeout, lost receipt or crash during/after this phase is ambiguous: find the original conversation and task marker; never automatically resubmit an unknown outcome. A distinct case is an explicit provider rejection with no generated answer and a visible instruction to send again: the observed stale-account rejection can be recovered once in the same browser by refreshing and resending, consuming the original attempt budget and deadline. No login/account selection is performed. Persist that recovery decision before acting; it survives crashes. Existing/partial answers and unknown outcomes do not permit that retry. Exactly-once delivery is not guaranteed.
@@ -69,9 +71,13 @@ There is no new product UI in v1: the agent invokes a CLI, the worker uses the e
 | A8 collect after restart | Exit the agent session, then invoke collect after worker completion | Persisted output and terminal reason remain available without re-running the task |
 | A9 independent validation | Use synthetic local browser page plus separate process/store checks | Label fixture evidence explicitly; do not claim real ChatGPT success from fixture results |
 | A10 supervisor interruption | Kill the supervisor, then read status and resume | Reports interrupted, preserves original deadline/attempt count, and avoids a second submission; no unattended reboot recovery is claimed |
-| A11 planning gate | User asks to save tokens and compare options from complete supplied constraints | Skill can dispatch the planning packet and verify the returned recommendation |
+| A11 planning gate | User explicitly selects token-saving web handoff to compare options from complete constraints | Skill can dispatch the planning packet and verify the returned recommendation |
 | A12 implementation exclusion | User asks to save tokens by writing a patch, fixing code, running tests or deploying | Skill does not hand the work to the web model; the main agent handles the implementation |
 | A13 incomplete problem | User asks for a plan but goal/inputs or acceptance are missing | Clarify the problem locally before dispatch; do not outsource the unknown decisions |
+| A14 ordinary research | User asks to research a topic without selecting token-saving methods or web handoff | Do not select this skill or send the task |
+| A15 methods only | User asks what methods can save agent tokens | Explain the option without browser/job side effects |
+| A16 concise / quota signal | User asks for fewer words or reports low remaining usage | Handle locally; neither signal selects web handoff |
+| A17 prior preference | An earlier task used web handoff; a new request only asks for research | Do not inherit web dispatch for the new task |
 
 ## Decisions, open questions and handoff
 
@@ -79,4 +85,4 @@ Confirmed: automatic web handoff; bounded failure handling; no continuous main-a
 
 The current ChatGPT selectors and automatic send/wait/collect path were verified on the tested date, including recovery after a worker crash; see [verification](verification.md). Still unverified: provider permission for this workflow; future website compatibility; whether the user's actual host exposes an authorized completion wakeup; portability beyond the tested macOS host. These affect provider execution, wakeup claims and publishing, not the local deterministic worker prototype. Do not mark real-provider acceptance complete without evidence.
 
-Verification must examine the current composer/completion signals in the task-owned page, durable task-space recovery, detached lifetime, and GitHub destination permissions. GitHub write access was established through official gh device authorization. S2 must define durable job state, supervision, ambiguous-send recovery and owned-resource cleanup. Review and verification must trace A1–A13. No synthetic output or design drawing is evidence that a real model task completed.
+Verification must examine the current composer/completion signals in the task-owned page, durable task-space recovery, detached lifetime, and GitHub destination permissions. GitHub write access was established through official gh device authorization. S2 must define durable job state, supervision, ambiguous-send recovery and owned-resource cleanup. Review and verification must trace A1–A17. No synthetic output or design drawing is evidence that a real model task completed.

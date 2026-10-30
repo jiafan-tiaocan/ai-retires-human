@@ -1,6 +1,6 @@
 ---
 name: web-task-relay
-description: Offload a clearly defined planning, design-analysis, option-comparison or decision-advice task to a web-model session when the user asks to conserve agent usage. Requires complete inputs, constraints, expected deliverables and acceptance criteria. Never use for implementation, coding, repository edits, debugging, executing tests or deployment. Dispatch once, then collect and verify without model-driven monitoring.
+description: Discuss or apply web-model handoff only when the user explicitly asks for methods to save tokens or agent quota, or explicitly selects this skill/web relay. Ordinary research or planning, concise-answer requests and low-quota signals do not trigger it. A methods question gets advice only; dispatch requires a selected web handoff and a complete planning problem. Never delegate coding or implementation.
 ---
 
 # Web Task Relay
@@ -9,7 +9,16 @@ Preserve the main agent's remaining usage by handing a complete **planning probl
 
 ## Decide whether to relay
 
-Use this only when all three conditions hold: the user asks to conserve agent usage; the deliverable is a plan, design analysis, option comparison or decision recommendation; and the problem, supplied inputs, constraints, output format and acceptance criteria are already clear enough to complete without the original conversation. Do not delegate an unclear problem and expect the remote model to interview the user.
+First check the user's current intent. Consider this skill only for an explicit request about **methods for saving tokens/agent quota**, or an explicit request to use this skill or a web-model handoff. A research/planning topic, "keep it short/save a few tokens", a low-quota signal, or a past preference for saving usage is not sufficient. Ordinary research stays with the main agent. An already selected relay remains authorized for that same task; do not repeat a permission question.
+
+If the user is only asking what token-saving methods exist, explain web handoff briefly with its setup and verification cost. Do not open a browser, create a job or send a task. Dispatch only after the user has selected web handoff for this task and its planning objective, inputs, constraints, output and acceptance criteria are complete. Missing facts are clarified locally.
+
+| User request | Action |
+| --- | --- |
+| "Research enterprise knowledge management" | Handle normally; do not select this skill. |
+| "Keep the answer short to save tokens" | Answer concisely; do not select this skill. |
+| "What methods can save agent tokens?" | Explain the option; no browser or job. |
+| "Use web handoff to save tokens; compare A/B under these complete constraints" | Dispatch the defined planning task once. |
 
 Do not use this skill when the requested deliverable is working code, a patch, repository edits, debugging, test execution, deployment or other implementation work. Keep that work with the main agent even if quota is low or the user explicitly invokes this skill for it. Code excerpts or pseudocode used only to explain a proposed design do not turn an analysis task into implementation; judge the requested outcome, not keywords. After an accepted plan returns, implementation follows the main agent's normal workflow.
 

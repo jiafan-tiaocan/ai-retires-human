@@ -38,7 +38,7 @@ The main agent checked all nine source URLs and the main cited claims, including
 - Real Chrome protocol/local-server fixtures: normal, worker crash, supervisor crash, borrowed browser, and shared-connector worker crash passed. The server saw one submission per task. Owned fixtures clean up only their own resources; borrowed browser remains usable.
 - Real Ego Lite/local-server fixture: contenteditable input, worker killed after submission, completed on attempt 2; the server recorded exactly one submission.
 - Independent read-only implementation review: passed after fixes. The reviewer independently re-ran 31 tests, used a local SDK stub to allocate two jobs to distinct pages in one TaskSpace, verify retry reuse of the first allocation and preserve the original page. It did not use the real account.
-- Independent skill-routing evaluation: a complete planning comparison can dispatch; coding/debugging/test/deployment requests stay local; explanatory pseudocode remains design work; vague goals require local clarification; no saving request means no automatic web handoff.
+- Independent skill-routing evaluation: a complete planning comparison with selected token-saving web handoff can dispatch; coding/debugging/test/deployment requests stay local; explanatory pseudocode remains design work; vague goals require local clarification; no saving request means no automatic web handoff.
 
 Coverage includes ambiguous sends, bounded retry/deadline persistence, stale-owner writes, terminal-event repair, process-group cleanup after leader death, hung worker/connector shutdown, disconnected IPC clients, cancellation, user-control stops and page-origin changes. Native Ego actions target a nonce on a specific original-document element, so navigation cannot redirect the packet into a new page's generic composer. Allocation is recorded before navigation and reused after crashes.
 
@@ -67,3 +67,11 @@ Earlier Apple Events runs failed on permission state; a dedicated automated Chro
 No unattended machine-reboot recovery, automatic Codex wakeup, Linux support, independent/free quota pool, unlimited usage, stable future website selectors or savings percentage was demonstrated. Windows is unsupported by the POSIX runner. A later explicit collect/resume uses persisted state; the project installs no OS service or recurring model-powered watcher.
 
 Technical success does not establish provider permission. OpenAI's [Terms of Use](https://openai.com/policies/terms-of-use/) restrict automatic extraction of output; this project has not established an exception. Browser/account access and third-party browser claims do not change that limitation.
+
+## Narrow routing and repository-home update
+
+The skill now considers only an explicit request for token-saving methods or explicit selection of this web relay. A methods-only question is advisory and creates no browser/job side effects. Ordinary research, short-answer requests, low-quota signals and a previous task's choice do not dispatch a new relay. The user must already have selected web handoff for a complete planning task.
+
+An independent, read-only scenario walkthrough covered eight requests: ordinary research; brevity for token savings; asking about saving methods; explicitly selected handoff; coding despite explicit skill invocation; research following an earlier handoff; a low-quota report; and an explicit contextual request to reuse this web skill. The decisions matched the intended boundaries. This evaluates instructions after loading, not the host's automatic discovery rate or a real website interaction.
+
+The Skill Creator validator, UI metadata constraints and relocated manual's local links passed. The runner was unchanged; browser/model tests were not repeated for this instruction/documentation change. Installation and operating details moved from the repository home into `docs/web-task-relay.md`; the new home explains the project's purpose and links to the still-unmerged candidate branch.
