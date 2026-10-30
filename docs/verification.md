@@ -44,7 +44,7 @@ Coverage includes ambiguous sends, bounded retry/deadline persistence, stale-own
 
 ## Reproduction
 
-Install developer dependencies as shown in the README, then:
+Install developer dependencies as shown in the [operating guide](web-task-relay.md), then:
 
 ```sh
 .venv/bin/ruff check --select E9,F skills tests
