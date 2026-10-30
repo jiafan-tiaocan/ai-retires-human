@@ -1,4 +1,4 @@
 interface:
   display_name: "Web Task Relay"
-  short_description: "Relay complete tasks without agent-driven monitoring"
-  default_prompt: "Use $web-task-relay to conserve my agent usage by handing off this self-contained task and verifying the returned result."
+  short_description: "Offload defined planning tasks without agent polling"
+  default_prompt: "Use $web-task-relay to conserve my agent usage by handing off this clearly defined planning or option-comparison task and verifying the returned result."

@@ -1,30 +1,63 @@
-# Verification record — 2026-10-30
+# Verification — 2026-10-30
 
-Status: **experimental review candidate; real-provider acceptance incomplete**.
+**The default Ego Lite backend completed a real ChatGPT send → wait → collect journey, including recovery after an injected worker crash.** This is a working macOS candidate. Provider policy permission, portability and automatic host wakeup are separate, unestablished claims.
 
-The candidate's browser runner SHA-256 is `2a84c4f1068c5d9c3dac29136b7f6c8dc652ce5c391ac476203d2f4f98523169`. Recompute this when changing the runner; do not transfer these results to a different implementation without checking the relevant changes.
+Runner SHA-256: `31756f01352418eaaacfb2f32a1b81c0525ea750f3094e8cb1f6931c51a16190`. Environment: macOS, Python 3.9, Ego Lite 0.6.2.5, official ego-browser guide v2.2.0. The page's model selector displayed Pro; no backend model ID is asserted.
 
-## Passed locally
+## Real provider acceptance
 
-- Skill Creator's frontmatter/name/scaffold validator: passed.
-- Ruff 0.14.4, rules E9/F, over `skills` and `tests`: passed.
-- `python3 -m unittest discover -s tests -p 'test_*.py' -v`: **16 tests passed** on macOS/Python 3.9.
-- An independent reviewer re-ran the same tests and reviewed the final corrections.
+The public [planning packet](../examples/plan-comparison.md) supplies four fictional collaboration options for an eight-person team with an 800 yuan monthly budget, Chinese support, Markdown export and at least 90 days of history. It requests a recommendation, exclusions, risks, validation and a pilot plan. It requests no coding or implementation.
 
-The cases exercise one successful marked transport using a fake browser, stale/wrong result rejection, a crash before clicking Send, a lost receipt after submission, duplicate job rejection, supervisor locking, preserved retry/deadline budgets, late stale-worker errors, terminal-event repair, origin changes, and a real hung subprocess killed at the overall deadline. The actual generated probe/fill/send JavaScript was executed in macOS JavaScriptCore to verify that a wrong origin is rejected before DOM access. These are local logic/runtime checks, not model-quality evidence.
+| Observation | Result |
+| --- | --- |
+| Normal automatic submission, waiting and collection | Completed on the first attempt; no manual fill/send/recovery |
+| Final runner, worker deliberately killed after persisted waiting | Completed on attempt 2 in 113.65 seconds, within the original deadline |
+| Recovery page | Same persisted TaskSpace/Page label; no replacement task or manual intervention |
+| Returned selection and monthly cost | B; 8 × 90 = 720 yuan |
+| Exclusions | A: only 30 days history; C: no Markdown export; D: 880 yuan exceeds budget |
+| Deliverables | Two risks, three validation steps, three pilot steps; locally checked against supplied inputs |
+| Message correlation | Matching visible user marker and assistant completion marker; no active generation control |
 
-Independent review exposed three defects which were corrected and retested: a stale worker could overwrite a newer terminal state; an interrupted terminal-state commit could lose its event; and checking origin only in a prior snapshot left a navigation window before fill/send. The final code protects writes with job ownership, repairs missing events and checks origin inside each page operation.
+The provider page kept a hidden copy of the user bubble as well as the visible bubble. Counting all matching DOM elements would incorrectly imply two messages; there was one visible matching user bubble. This is UI evidence, not a server-side exactly-once guarantee. The local synthetic server separately records submission counts.
 
-## Not passed / not established
+The source-controlled packet is public fictional data. Account information, conversation URLs, raw page text and local job receipts remain in ignored private runtime storage. Raw transport text may include visible UI labels; collection extracts the requested payload and validates it. The terminal marker proves transport correlation, not correctness.
 
-The opt-in `python3 tests/browser_fixture.py` check was attempted against a local synthetic page in real Chrome. Chrome returned **Apple Events JavaScript disabled**, so the job correctly ended as `needs_attention`. No successful browser-fixture transport is claimed. A tiny intended ChatGPT smoke job encountered the same prerequisite failure before any confirmed submission; it is not a successful real-model test.
+The main agent used code-based waits while testing and continued implementation/review. The shipped worker and supervisor make no model calls. No percentage token saving was measured.
 
-An earlier interactive browser-control probe had succeeded, but the later window/context returned the disabled-permission error. The cause of that environment change was not established. Do not characterize it as a fixed code defect or ask the worker to bypass the browser setting.
+## Local checks and independent review
 
-Still required before claiming a working ChatGPT integration: stable browser-control permission, actual composer/send/message/completion selectors on the current website, a verified automatic send/wait/read journey, and appropriate provider permission. OpenAI's current [Terms of Use](https://openai.com/policies/terms-of-use/) restrict automated extraction of output; this project has not established an exception.
+- Skill Creator validator: passed.
+- Ruff 0.14.4, E9/F over skills/tests, and Git whitespace check: passed.
+- 31 logic tests: passed, including the generated Ego script executed in real Node for navigation between target selection and native fill/send. On hosts without Node, that one regression is explicitly skipped; set `RELAY_TEST_NODE` to an available Node binary to run it.
+- Real Chrome protocol/local-server fixtures: normal, worker crash, supervisor crash, borrowed browser, and shared-connector worker crash passed. The server saw one submission per task. Owned fixtures clean up only their own resources; borrowed browser remains usable.
+- Real Ego Lite/local-server fixture: contenteditable input, worker killed after submission, completed on attempt 2; the server recorded exactly one submission.
+- Independent read-only implementation review: passed after fixes. The reviewer independently re-ran 31 tests, used a local SDK stub to allocate two jobs to distinct pages in one TaskSpace, verify retry reuse of the first allocation and preserve the original page. It did not use the real account.
+- Independent skill-routing evaluation: a complete planning comparison can dispatch; coding/debugging/test/deployment requests stay local; explanatory pseudocode remains design work; vague goals require local clarification; no saving request means no automatic web handoff.
 
-No host-specific wakeup, unattended machine-reboot recovery, Windows/Linux compatibility, savings percentage, independent quota pool, or unlimited/free model access has been demonstrated. Output correctness still requires the main agent's own acceptance checks.
+Coverage includes ambiguous sends, bounded retry/deadline persistence, stale-owner writes, terminal-event repair, process-group cleanup after leader death, hung worker/connector shutdown, disconnected IPC clients, cancellation, user-control stops and page-origin changes. Native Ego actions target a nonce on a specific original-document element, so navigation cannot redirect the packet into a new page's generic composer. Allocation is recorded before navigation and reused after crashes.
 
 ## Reproduction
 
-Follow the commands in the root README. The browser fixture creates only synthetic loopback input and does not call a model. A passing fixture would establish browser transport and selected recovery behavior, not permission or reliable execution on a real provider. Keep real job packets, account information and conversation output outside Git.
+Install developer dependencies as shown in the README, then:
+
+```sh
+.venv/bin/ruff check --select E9,F skills tests
+.venv/bin/python -m unittest discover -s tests -p 'test_*.py' -v
+.venv/bin/python tests/browser_fixture.py
+```
+
+To test the real Ego browser with synthetic loopback data, first create/resume the current goal's agent-owned TaskSpace through its official API. Pass that numeric ID; the fixture opens its own page within the space:
+
+```sh
+.venv/bin/python tests/browser_fixture.py --scenario egolite-worker-crash --ego-space NUMERIC_ID
+```
+
+The fixture invokes no model. A real-provider test is opt-in: normally sign in, dispatch the example packet, collect, then independently validate the constraints. End the successful TaskSpace through the official `finish({keep: []})` API. Preserve error spaces for diagnosis and yield when the user takes control.
+
+## Remaining limits and historical failures
+
+Earlier Apple Events runs failed on permission state; a dedicated automated Chrome login was rejected by Google; Firefox did not launch on the tested host. These are historical alternatives, not prerequisites for the successful Ego backend. Chrome native attachment remains optional and may request a fresh grant when its connector restarts.
+
+No unattended machine-reboot recovery, automatic Codex wakeup, Linux support, independent/free quota pool, unlimited usage, stable future website selectors or savings percentage was demonstrated. Windows is unsupported by the POSIX runner. A later explicit collect/resume uses persisted state; the project installs no OS service or recurring model-powered watcher.
+
+Technical success does not establish provider permission. OpenAI's [Terms of Use](https://openai.com/policies/terms-of-use/) restrict automatic extraction of output; this project has not established an exception. Browser/account access and third-party browser claims do not change that limitation.
