@@ -1,4 +1,4 @@
-# Web Task Relay
+# AI Retires Human
 
 **把问题明确的方案工作交给网页模型，发出后不用 Agent 盯着等。**
 

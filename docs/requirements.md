@@ -1,6 +1,6 @@
 # Web Task Relay — requirements, revision 3
 
-This is a personal open-source project for an individual coding-agent user. Its destination is `https://github.com/jiafan-tiaocan/harness`. No employer source code, internal rules, task records, account data or business examples belong in the published package.
+This is a personal open-source project for an individual coding-agent user. Its destination is `https://github.com/jiafan-tiaocan/ai-retires-human`. No employer source code, internal rules, task records, account data or business examples belong in the published package.
 
 ## Problem and outcome
 
@@ -75,7 +75,7 @@ There is no new product UI in v1: the agent invokes a CLI, the worker uses the e
 
 ## Decisions, open questions and handoff
 
-Confirmed: automatic web handoff; bounded failure handling; no continuous main-agent monitoring; first requested target ChatGPT; user-authorized use of the web account; browser control can be replaced and a nonworking Draft does not satisfy acceptance; destination `jiafan-tiaocan/harness`. Author-selected reversible implementation choices: Ego Lite official CLI as default, native Chrome attachment as an alternative, CLI names, optional dedicated profiles, local storage layout and retry/deadline defaults. Chrome's connection grant can be required again on future sessions; do not promise a permanent browser grant. Only tested operating systems may be claimed. A successful synthetic fixture is still not real-provider acceptance.
+Confirmed: automatic web handoff; bounded failure handling; no continuous main-agent monitoring; first requested target ChatGPT; user-authorized use of the web account; browser control can be replaced and a nonworking Draft does not satisfy acceptance; destination `jiafan-tiaocan/ai-retires-human`. Author-selected reversible implementation choices: Ego Lite official CLI as default, native Chrome attachment as an alternative, CLI names, optional dedicated profiles, local storage layout and retry/deadline defaults. Chrome's connection grant can be required again on future sessions; do not promise a permanent browser grant. Only tested operating systems may be claimed. A successful synthetic fixture is still not real-provider acceptance.
 
 The current ChatGPT selectors and automatic send/wait/collect path were verified on the tested date, including recovery after a worker crash; see [verification](verification.md). Still unverified: provider permission for this workflow; future website compatibility; whether the user's actual host exposes an authorized completion wakeup; portability beyond the tested macOS host. These affect provider execution, wakeup claims and publishing, not the local deterministic worker prototype. Do not mark real-provider acceptance complete without evidence.
 
