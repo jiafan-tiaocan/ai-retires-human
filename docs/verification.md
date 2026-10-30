@@ -24,6 +24,12 @@ The source-controlled packet is public fictional data. Account information, conv
 
 The main agent used code-based waits while testing and continued implementation/review. The shipped worker and supervisor make no model calls. No percentage token saving was measured.
 
+## Real enterprise-knowledge research case
+
+The follow-up [enterprise knowledge management packet](../examples/enterprise-knowledge-research.md) exercised a substantial, fully specified planning task. The background runner completed on attempt 1 in 458.95 seconds. The collected report contained about 4,000 Chinese characters plus references, with nine primary sources from five organizations, a governance lifecycle, three retrieval paths, permission/version/deletion boundaries, a fictional rollback example and a six-week pilot with measurable criteria.
+
+The main agent checked all nine source URLs and the main cited claims, including KCS reuse/review, DCMI metadata, W3C provenance, hybrid search, GraphRAG evaluation limits, permission synchronization, prompt injection and NIST citation checks. It then reconstructed six tables and source links for publication. Raw browser text does not preserve every Markdown heading/table delimiter; collection is followed by editorial formatting and acceptance, rather than forwarding that text unchanged. Reported thresholds are proposed pilot goals, not measured enterprise results. No internal company materials were sent to the web model; private outputs and the publication destination are excluded from this repository.
+
 ## Local checks and independent review
 
 - Skill Creator validator: passed.

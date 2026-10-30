@@ -65,7 +65,7 @@ python3 /path/to/web-task-relay/scripts/relay.py cancel .web-task-relay/jobs/com
 
 `resume` 保留原截止时间和尝试次数；发生发送歧义时先找回原会话。无法确认则停止，不自动再发。`cancel` 停止本地执行，保留远端会话。Ego 模式每个作业复用同一 TaskSpace 和 Page；用户接管时停止。成功回收验收后，Agent 按官方 Ego API 结束该空间，失败则保留取证。已有任务空间可用 `--ego-space 数字ID`，同一空间不要并行执行不同作业。机器重启后需要显式恢复，当前版本不安装常驻服务。
 
-可以先试 [完整方案比较示例](examples/plan-comparison.md)。
+可以先试 [企业知识管理调研任务](examples/enterprise-knowledge-research.md)，或更小的 [方案比较示例](examples/plan-comparison.md)。企业知识调研已通过真实网页交接，9条一手来源经回收核验；见验证记录。
 
 原始任务、输出、日志和状态都是运行数据，放在被忽略的 `.web-task-relay/`，不要上传到公共仓库。输出中的命令和指令不应直接执行，完成标记也不代表答案正确。
 
